@@ -7,19 +7,19 @@ const app = express();
 const PORT = 5000;
 const { MONGODBURI } = require("./keys");
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
  require("./models/user");
-// require("./models/post");
+
 
  //register routes
 app.use(require("./routes/auth"));
-// app.use(require("./routes/post"));
-// app.use(require("./routes/user"));
+
+app.use(require("./routes/user"));
 
 //establishing Database connection
 mongoose.connect(MONGODBURI, {
