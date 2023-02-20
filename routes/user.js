@@ -2,23 +2,17 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const requireLogin = require('../middleware/requireLogin')
-const User = mongoose.model("User")
+const Post = mongoose.model("User")
 
-//view profile of different users 
-router.get('/user/:id',requireLogin,(req,res)=>{
-    User.findOne({_id:req.params.id})
-    .select("-password")
-    .then(user=>{
-         Post.find({postedBy:req.params.id})
-         .populate("postedBy","_id name")
-         .exec((err,posts)=>{
-             if(err){
-                 return res.status(422).json({error:err})
-             }
-             res.json({user,posts})
-         })
-    }).catch(err=>{
-        return res.status(404).json({error:"User not found"})
+//retreive posts pf specific user
+router.get('/mypost',requireLogin, (req,res) =>{
+    Post.find({postedBy:req.user._id})
+    .populate( "_id name")
+    .then(mypost=>{
+        res.json({mypost})
+    })
+    .catch(err=>{
+        console.log(err)
     })
 })
 module.exports = router
